@@ -25,16 +25,32 @@ bool ModuleOpenGL::Init()
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // we want to have a depth buffer with 24 bits
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); // we want to have a stencil buffer with 8 bits
 
+	context = SDL_GL_CreateContext(App->GetWindow()->window);
+
 	GLenum err = glewInit();
 	// … check for errors
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	// Should be 2.0
+
+	LOG("Vendor: %s", glGetString(GL_VENDOR));
+	LOG("Renderer: %s", glGetString(GL_RENDERER));
+	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+	LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	
+	glEnable(GL_DEPTH_TEST); // Enable depth test
+	glEnable(GL_CULL_FACE); // Enable cull backward faces
+	glFrontFace(GL_CCW); // Front faces will be counter clockwise
 
 	return true;
 }
 
 update_status ModuleOpenGL::PreUpdate()
 {
+	/*if window is resized SDL_GetWindowSize
+		glViewport(0,0, window_width, window_height);*/
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -47,6 +63,9 @@ update_status ModuleOpenGL::Update()
 
 update_status ModuleOpenGL::PostUpdate()
 {
+
+	SDL_GL_SwapWindow(App->GetWindow()->window);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -54,6 +73,7 @@ update_status ModuleOpenGL::PostUpdate()
 bool ModuleOpenGL::CleanUp()
 {
 	LOG("Destroying renderer");
+	SDL_GL_DeleteContext(context);
 
 	//Destroy window
 
@@ -64,3 +84,43 @@ void ModuleOpenGL::WindowResized(unsigned width, unsigned height)
 {
 }
 
+char* ModuleOpenGL::LoadShaderSource(const char* shader_file_name)
+{
+	char* data = nullptr;
+	FILE* file = nullptr;
+	fopen_s(&file, shader_file_name, "rb");
+	if (file)
+	{
+		fseek(file, 0, SEEK_END);
+		int size = ftell(file);
+		data = (char*)malloc(size + 1);
+		fseek(file, 0, SEEK_SET);
+		fread(data, 1, size, file);
+		data[size] = 0;
+		fclose(file);
+	}
+	return data;
+}
+
+unsigned ModuleOpenGL::CompileShader(unsigned type, const char* source)
+{
+	unsigned shader_id = glCreateShader(type);
+	glShaderSource(shader_id, 1, &source, 0);
+	glCompileShader(shader_id);
+	int res = GL_FALSE;
+	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &res);
+	if (res == GL_FALSE)
+	{
+		int len = 0;
+		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len);
+		if (len > 0)
+		{
+			int written = 0;
+			char* info = (char*)malloc(len);
+			glGetShaderInfoLog(shader_id, len, &written, info);
+			LOG("Log Info: %s", info);
+			free(info);
+		}
+	}
+	return shader_id;
+}
