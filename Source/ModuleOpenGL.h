@@ -20,7 +20,7 @@ public:
 
 	void APIENTRY OurOpenGLErrorFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 	void WindowResized(unsigned width, unsigned height);
-
+	void* GetContext() const { return context; }
 	
 private:
 	void* context;

@@ -6,6 +6,7 @@
 
 class ModuleOpenGL;
 class ModuleWindow;
+class ModuleEditor;
 class ModuleTextures;
 class ModuleInput;
 class ModuleRenderExercise;
@@ -35,6 +36,7 @@ private:
     ModuleInput* input = nullptr;
     ModuleProgram* program = nullptr;
     ModuleRenderExercise* exercice = nullptr;
+    ModuleEditor* editor = nullptr;
 
     std::list<Module*> modules;
 

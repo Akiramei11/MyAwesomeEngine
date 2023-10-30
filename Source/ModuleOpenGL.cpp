@@ -83,8 +83,7 @@ void APIENTRY ModuleOpenGL::OurOpenGLErrorFunction(GLenum source, GLenum type, G
 
 update_status ModuleOpenGL::PreUpdate()
 {
-	/*if window is resized SDL_GetWindowSize
-		glViewport(0,0, window_width, window_height);*/
+	//glViewport(0,0, window_width, window_height);
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -94,7 +93,7 @@ update_status ModuleOpenGL::PreUpdate()
 // Called every draw update
 update_status ModuleOpenGL::Update()
 {
-
+	
 	return UPDATE_CONTINUE;
 }
 
