@@ -60,8 +60,8 @@ bool ModuleOpenGL::Init()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	glEnable(GL_DEBUG_OUTPUT); // Enable Output Callbacks
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Output Callbacks
-	glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
+	//glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
+	//glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 
 	context = SDL_GL_CreateContext(App->GetWindow()->window);
 
