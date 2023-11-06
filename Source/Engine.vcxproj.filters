@@ -127,6 +127,7 @@
     <ClCompile Include="MathGeoLib\include\Geometry\TriangleMesh.cpp">
       <Filter>MathGeoLib\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleDebugDraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -346,6 +347,9 @@
     <ClInclude Include="MathGeoLib\include\Geometry\TriangleMesh.h">
       <Filter>MathGeoLib\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="debug_draw.hpp" />
+    <ClInclude Include="debugdraw.h" />
+    <ClInclude Include="ModuleDebugDraw.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default_fragment.glsl" />
@@ -393,6 +397,9 @@
     </Filter>
     <Filter Include="MathGeoLib\Time">
       <UniqueIdentifier>{90cf8e5f-18ce-4dd0-8071-b02e3e5dba9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="debug_draw">
+      <UniqueIdentifier>{6892e9ef-c69f-42d1-9eb6-c601e20f1e6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

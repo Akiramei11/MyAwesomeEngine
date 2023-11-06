@@ -4,6 +4,8 @@
 #include "ModuleRenderExercise.h"
 #include "GL/glew.h"
 #include "MathGeoLib.h"
+#include "ModuleDebugDraw.h"
+#include "debugdraw.h"
 
 ModuleRenderExercise::ModuleRenderExercise()
 {
@@ -24,7 +26,6 @@ bool ModuleRenderExercise::Init()
 update_status ModuleRenderExercise::Update()
 {
 	RenderVBO(triangle, App->GetProgram()->GetProgramId());
-	auto info = glGetError();
 	return UPDATE_CONTINUE;
 
 }
@@ -48,6 +49,18 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 void ModuleRenderExercise::DestroyVBO(unsigned vbo)
 {
 	glDeleteBuffers(1, &vbo);
+}
+
+float4x4 ModuleRenderExercise::MyLookAt(const float3 eye, const float3 target, const float3 up)
+{
+	float3 forward = (eye - target).Normalized();
+	float3 right = Cross(forward, up).Normalized();
+	float3 viewup = Cross(right, forward).Normalized();
+
+	float4x4 firstMat = float4x4(float3x4(right, up, -forward, float3(0, 0, 0)));
+	float4x4 secondMat = float4x4(float4::unitX, float4::unitY, float4::unitZ, float4(eye, 1));
+	return firstMat * secondMat;
+
 }
 
 // This function must be called each frame for drawing the triangle
@@ -82,13 +95,21 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	float3 up = float3::unitY;
 
 
-	float4x4 view = float4x4::LookAt(eye, target, forward, up, up);
+	float4x4 view = MyLookAt(eye, target, up);
 
 
-	glUniformMatrix4fv(glGetUniformLocation(program, "model"), 1, GL_TRUE, &model[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_TRUE, &view[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(program, "proj"), 1, GL_TRUE, &proj[0][0]);
+	glUseProgram(program);
+	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0]);
+	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(2, 1, GL_TRUE, &proj[0][0]);
+
 		// TODO: bind buffer and vertex attributes
 	// 1 triangle to draw = 3 vertices
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
+	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Gray);
+	App->GetDebugDraw()->Draw( view, proj, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 }
+
