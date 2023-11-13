@@ -48,7 +48,8 @@ update_status ModuleEditor::PreUpdate()
 update_status ModuleEditor::Update()
 {
 	// Do your freestyle .................
-	ImGui::ShowDemoWindow();
+	
+	//ImGui::ShowDemoWindow();
 
 	// End your freestyle.................
 	ImGui::Render();

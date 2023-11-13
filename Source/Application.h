@@ -12,6 +12,7 @@ class ModuleInput;
 class ModuleRenderExercise;
 class ModuleProgram;
 class ModuleDebugDraw;
+class ModuleCamera;
 
 class Application
 {
@@ -40,6 +41,7 @@ private:
     ModuleRenderExercise* exercice = nullptr;
     ModuleEditor* editor = nullptr;
     ModuleDebugDraw* debug_draw = nullptr;
+    ModuleCamera* camera = nullptr;
 
     std::list<Module*> modules;
 
