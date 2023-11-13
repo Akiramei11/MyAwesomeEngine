@@ -14,14 +14,16 @@ public:
 
 	// Destructor
 	virtual ~ModuleWindow();
-
 	// Called before quitting
 	bool Init() override;
-
 	// Called before quitting
 	bool CleanUp() override;
 
-public:
+	SDL_Window* GetWindow() const { return window; }
+	SDL_Surface* GetScreenSurface() const { return screen_surface; }
+
+
+private:
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
 

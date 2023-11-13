@@ -63,7 +63,7 @@ bool ModuleOpenGL::Init()
 	//glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
 	//glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 
-	context = SDL_GL_CreateContext(App->GetWindow()->window);
+	context = SDL_GL_CreateContext(App->GetWindow()->GetWindow());
 
 	GLenum err = glewInit();
 	// … check for errors
@@ -101,7 +101,7 @@ update_status ModuleOpenGL::Update()
 update_status ModuleOpenGL::PostUpdate()
 {
 
-	SDL_GL_SwapWindow(App->GetWindow()->window);
+	SDL_GL_SwapWindow(App->GetWindow()->GetWindow());
 
 	return UPDATE_CONTINUE;
 }

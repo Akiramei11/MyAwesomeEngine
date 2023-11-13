@@ -30,7 +30,7 @@ bool ModuleEditor::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-	ImGui_ImplSDL2_InitForOpenGL(App->GetWindow()->window, App->GetOpenGL()->GetContext());
+	ImGui_ImplSDL2_InitForOpenGL(App->GetWindow()->GetWindow(), App->GetOpenGL()->GetContext());
 	ImGui_ImplOpenGL3_Init("#version 440");
 	return true;
 }
@@ -38,7 +38,7 @@ bool ModuleEditor::Init()
 update_status ModuleEditor::PreUpdate()
 {
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->GetWindow()->window);
+	ImGui_ImplSDL2_NewFrame(App->GetWindow()->GetWindow());
 	ImGui::NewFrame();
 
 	return UPDATE_CONTINUE;

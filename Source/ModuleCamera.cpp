@@ -3,6 +3,7 @@
 #include "ModuleProgram.h"
 #include "ModuleDebugDraw.h"
 #include "debugdraw.h"
+#include "ModuleWindow.h"
 
 ModuleCamera::ModuleCamera()
 {
@@ -28,8 +29,11 @@ update_status ModuleCamera::PreUpdate()
 // Called every draw update
 update_status ModuleCamera::Update()
 {
-	float4x4 proj = GetProjectionMatrix();
-	float3 eye = float3(10, 10, 10);
+	int width = App->GetWindow()->GetScreenSurface()->w;
+	int height = App->GetWindow()->GetScreenSurface()->h;
+
+	float4x4 proj = GetProjectionMatrix(width, height);
+	float3 eye = float3(10, 3, -10);
 	float3 target = float3(0, 0, 0);
 	float3 up = float3(0, 1, 0);
 	float4x4 view = LookAt(eye, target, up);
@@ -40,7 +44,7 @@ update_status ModuleCamera::Update()
 
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-20, 20, 0.0f, 1.0f, dd::colors::Gray);
-	App->GetDebugDraw()->Draw(view, proj, SCREEN_WIDTH, SCREEN_HEIGHT);
+	App->GetDebugDraw()->Draw(view, proj, width, height);
 
 	return UPDATE_CONTINUE;
 }
@@ -86,7 +90,7 @@ float4x4 ModuleCamera::LookAt(const float3 eye, const float3 target, const float
 	return firstMat * secondMat;
 
 }
-float4x4 ModuleCamera::GetProjectionMatrix() {
+float4x4 ModuleCamera::GetProjectionMatrix(int screen_width, int screen_height) {
 	Frustum frustum;
 	frustum.type = FrustumType::PerspectiveFrustum;
 	frustum.pos = float3::zero;
@@ -95,7 +99,7 @@ float4x4 ModuleCamera::GetProjectionMatrix() {
 	frustum.nearPlaneDistance = 0.1f;
 	frustum.farPlaneDistance = 100.0f;
 	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f)) * (float)SCREEN_HEIGHT/ (float)SCREEN_WIDTH;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f)) * (float)screen_width / (float)screen_height;
 
 	return frustum.ProjectionMatrix();
 }

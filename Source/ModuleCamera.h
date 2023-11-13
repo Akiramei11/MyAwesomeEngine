@@ -22,7 +22,7 @@ public:
 	void Position();
 	void Orientation();
 	float4x4 LookAt(const float3 eye, const float3 target, const float3 up);
-	float4x4 GetProjectionMatrix();
+	float4x4 GetProjectionMatrix(int screen_width, int screen_height);
 	float4x4 GetViewMatrix();
 
 private:
