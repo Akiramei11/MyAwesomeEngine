@@ -19,8 +19,8 @@ public:
 	bool CleanUp() override;
 
 	void WindowResized(unsigned width, unsigned height);
-	void* GetContext() const { return context; }
+	void* GetContext() const { return m_context; }
 	
 private:
-	void* context;
+	void* m_context;
 };

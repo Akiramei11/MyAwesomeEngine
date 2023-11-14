@@ -63,7 +63,7 @@ bool ModuleOpenGL::Init()
 	//glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
 	//glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 
-	context = SDL_GL_CreateContext(App->GetWindow()->GetWindow());
+	m_context = SDL_GL_CreateContext(App->GetWindow()->GetWindow());
 
 	GLenum err = glewInit();
 	// … check for errors
@@ -110,7 +110,7 @@ update_status ModuleOpenGL::PostUpdate()
 bool ModuleOpenGL::CleanUp()
 {
 	LOG("Destroying renderer");
-	SDL_GL_DeleteContext(context);
+	SDL_GL_DeleteContext(m_context);
 
 	//Destroy window
 	return true;

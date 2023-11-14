@@ -29,6 +29,7 @@ public:
     ModuleWindow* GetWindow() { return window; }
     ModuleInput*  GetInput() { return input; }
     ModuleProgram* GetProgram() { return program; }
+    ModuleCamera* GetCamera() { return camera; }
     ModuleDebugDraw* GetDebugDraw() { return debug_draw; }
 
 
