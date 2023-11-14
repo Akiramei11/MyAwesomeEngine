@@ -55,10 +55,7 @@ update_status ModuleCamera::Update()
 	SDL_GetWindowSize(App->GetWindow()->GetWindow(), &windowWidth, &windowHeight);
 
 	UpdateProjectionMatrix(windowWidth, windowHeight);
-	float3 up = float3(0, 1, 0);
 	UpdateViewMatrix();
-	//view = view * float4x4::Translate(2,0,0);
-
 
 	glUseProgram(App->GetProgram()->GetProgramId());
 	glUniformMatrix4fv(1, 1, GL_TRUE, &m_view[0][0]);
