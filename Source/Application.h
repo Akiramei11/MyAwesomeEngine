@@ -7,7 +7,7 @@
 class ModuleOpenGL;
 class ModuleWindow;
 class ModuleEditor;
-class ModuleTextures;
+class ModuleTexture;
 class ModuleInput;
 class ModuleRenderExercise;
 class ModuleProgram;
@@ -31,6 +31,7 @@ public:
     ModuleProgram* GetProgram() { return program; }
     ModuleCamera* GetCamera() { return camera; }
     ModuleDebugDraw* GetDebugDraw() { return debug_draw; }
+    ModuleTexture* GetTextures() { return texture; }
 
 
 private:
@@ -43,6 +44,7 @@ private:
     ModuleEditor* editor = nullptr;
     ModuleDebugDraw* debug_draw = nullptr;
     ModuleCamera* camera = nullptr;
+    ModuleTexture* texture = nullptr;
 
     std::list<Module*> modules;
 

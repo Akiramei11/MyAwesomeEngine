@@ -17,4 +17,7 @@ public:
 
 private:
 	const Uint8 *keyboard = NULL;
+	unsigned int mouse = NULL;
+	int m_x;
+	int m_y;
 };
