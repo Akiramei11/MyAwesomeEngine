@@ -14,13 +14,13 @@ public:
 	update_status Update() override;
 	bool CleanUp() override;
 
-	void RenderVBO(unsigned vbo, unsigned program);
+	void RenderVBO(unsigned program);
 	unsigned CreateTriangleVBO();
-	void DestroyVBO(unsigned vbo);
+	void DestroyVBO();
 
-	float4x4 MyLookAt(const float3 eye, const float3 target, const float3 up);
 
 
 private:
 	unsigned triangle;
+	unsigned texture_object;
 };

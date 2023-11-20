@@ -60,8 +60,6 @@ bool ModuleOpenGL::Init()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	glEnable(GL_DEBUG_OUTPUT); // Enable Output Callbacks
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Output Callbacks
-	//glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
-	//glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 
 	m_context = SDL_GL_CreateContext(App->GetWindow()->GetWindow());
 
@@ -69,6 +67,9 @@ bool ModuleOpenGL::Init()
 	// … check for errors
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 	// Should be 2.0
+
+	glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); // sets the callback
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, true);
 
 	LOG("Vendor: %s", glGetString(GL_VENDOR));
 	LOG("Renderer: %s", glGetString(GL_RENDERER));

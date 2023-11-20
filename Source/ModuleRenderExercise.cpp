@@ -19,19 +19,20 @@ ModuleRenderExercise::~ModuleRenderExercise()
 bool ModuleRenderExercise::Init()
 {
 	triangle = CreateTriangleVBO();
-
+	DirectX::ScratchImage tex = App->GetTextures()->LoadTexture("Test-image-Baboon.png");
+	texture_object = App->GetTextures()->CreateTexture(&tex);
 	
 	return true;
 }
 update_status ModuleRenderExercise::Update()
 {
-	RenderVBO(triangle, App->GetProgram()->GetProgramId());
+	RenderVBO(App->GetProgram()->GetProgramId());
 	return UPDATE_CONTINUE;
 
 }
 bool ModuleRenderExercise::CleanUp()
 {
-	DestroyVBO(triangle);
+	DestroyVBO();
 	return true;
 }
 
@@ -50,29 +51,32 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo); // set vbo active
-	glBufferData(GL_ARRAY_BUFFER, sizeof(buffer_data), buffer_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vtx_data), vtx_data, GL_STATIC_DRAW);
 	return vbo;
 }
 // This function must be called one time at destruction of vertex buffer
-void ModuleRenderExercise::DestroyVBO(unsigned vbo)
+void ModuleRenderExercise::DestroyVBO()
 {
-	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &triangle);
 }
 
 
 
 // This function must be called each frame for drawing the triangle
-void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
+void ModuleRenderExercise::RenderVBO(unsigned program)
 {
+	//Enables vertex atribute
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 3 * 3));
-	DirectX::ScratchImage tex = App->GetTextures()->LoadTexture("Test-image-Baboon.png");
-	unsigned texture_object = App->GetTextures()->CreateTexture(&tex);
-	glActiveTexture(GL_TEXTURE0);
+
+	
+
+	//Enables the texture
+	glActiveTexture(GL_TEXTURE0); // The 0 needs to match with the sampler in fragment shader
 	glBindTexture(GL_TEXTURE_2D, texture_object);
 
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, triangle);
 	glEnableVertexAttribArray(0);
 	// size = 3 float per vertex
 	// stride = 0 is equivalent to stride = sizeof(float)*3

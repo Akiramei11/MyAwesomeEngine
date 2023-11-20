@@ -14,7 +14,7 @@ ModuleTexture::~ModuleTexture()
 // Called before render is available
 bool ModuleTexture::Init()
 {
-	
+	return true;
 }
 
 update_status ModuleTexture::PreUpdate()
@@ -50,21 +50,25 @@ DirectX::ScratchImage ModuleTexture::LoadTexture(const char* file)
 {
 	const size_t cSize = strlen(file) + 1;
 	wchar_t* fileName = new wchar_t[cSize];
-	mbstowcs(fileName, file, cSize);
+	size_t convertedChars = 0;
+	mbstowcs_s(&convertedChars, fileName, cSize, file, _TRUNCATE);
 
 	DirectX::ScratchImage texture;
 	// Try loading DDS
-	HRESULT hr = DirectX::LoadFromDDSFile(fileName, DDS_FLAGS_NONE, nullptr, texture);
+	HRESULT hr = DirectX::LoadFromDDSFile(fileName, DirectX::DDS_FLAGS_NONE, nullptr, texture);
 
 	// If DDS loading fails, try loading TGA
 	if (!SUCCEEDED(hr)) {
-		HRESULT hr = DirectX::LoadFromTGAFile(fileName, TGA_FLAGS_NONE, nullptr, texture);
+		hr = DirectX::LoadFromTGAFile(fileName, DirectX::TGA_FLAGS_NONE, nullptr, texture);
 	}
 	// If both DDS and TGA loading fails, try loading using WIC
 	if (!SUCCEEDED(hr)) {
-		HRESULT hr = DirectX::LoadFromWICFile(fileName, WIC_FLAGS_NONE, nullptr, texture);
+		hr = DirectX::LoadFromWICFile(fileName, DirectX::WIC_FLAGS_NONE, nullptr, texture);
 	}
-	return texture;	
+
+	delete[] fileName; // Remember to free the allocated memory
+
+	return texture;
 }
 
 unsigned ModuleTexture::CreateTexture(DirectX::ScratchImage* texture)
