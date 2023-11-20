@@ -101,9 +101,8 @@ unsigned ModuleTexture::CreateTexture(DirectX::ScratchImage* texture)
 		assert(false && "Unsupported format");
 	}
 	glGenTextures(0, &texid);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, texid);
-	//glTexImage2D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, 
-	//	texMeta.width, texMeta.height, 0, format, type, texture.GetPixels());
+	glBindTexture(GL_TEXTURE_2D, texid);
+
 	for (size_t i = 0; i < texMeta.mipLevels; ++i)
 	{
 		const DirectX::Image* mip = texture->GetImage(i, 0, 0);

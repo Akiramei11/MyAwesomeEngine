@@ -19,6 +19,7 @@ ModuleRenderExercise::~ModuleRenderExercise()
 bool ModuleRenderExercise::Init()
 {
 	triangle = CreateTriangleVBO();
+
 	DirectX::ScratchImage tex = App->GetTextures()->LoadTexture("Test-image-Baboon.png");
 	texture_object = App->GetTextures()->CreateTexture(&tex);
 	
@@ -39,7 +40,6 @@ bool ModuleRenderExercise::CleanUp()
 // This function must be called one time at creation of vertex buffer
 unsigned ModuleRenderExercise::CreateTriangleVBO()
 {
-	float vtx_data[] = { -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
 	float buffer_data[] = {
 		-1.0f, -1.0f, 0.0f, //  v0 pos
 		1.0f, -1.0f, 0.0f, //  v1 pos
@@ -51,7 +51,13 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo); // set vbo active
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vtx_data), vtx_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(buffer_data), buffer_data, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 3 * 3));
 	return vbo;
 }
 // This function must be called one time at destruction of vertex buffer
@@ -64,25 +70,11 @@ void ModuleRenderExercise::DestroyVBO()
 
 // This function must be called each frame for drawing the triangle
 void ModuleRenderExercise::RenderVBO(unsigned program)
-{
-	//Enables vertex atribute
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 3 * 3));
-
-	
-
-	//Enables the texture
-	glActiveTexture(GL_TEXTURE0); // The 0 needs to match with the sampler in fragment shader
+{	
+	////Enables the texture
+	glActiveTexture(GL_TEXTURE5); // The 5 needs to match with the sampler in fragment shader
 	glBindTexture(GL_TEXTURE_2D, texture_object);
 
-
-	glBindBuffer(GL_ARRAY_BUFFER, triangle);
-	glEnableVertexAttribArray(0);
-	// size = 3 float per vertex
-	// stride = 0 is equivalent to stride = sizeof(float)*3
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glUseProgram(program);
-	// TODO: retrieve model view and projection
 	float4x4 model = float4x4::FromTRS(float3(0.0f, 0.0f, 0.0f),
 		float4x4::RotateZ(0.0f),
 		float3(1.0f, 1.0f, 1.0f));
