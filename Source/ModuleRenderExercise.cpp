@@ -3,7 +3,6 @@
 #include "ModuleProgram.h"
 #include "ModuleRenderExercise.h"
 #include "ModuleTexture.h"
-
 #include "GL/glew.h"
 #include "MathGeoLib.h"
 #include "ModuleTexture.h"
@@ -46,7 +45,7 @@ bool ModuleRenderExercise::CleanUp()
 	//DestroyVBO();
 	return true;
 }
-//
+
 //// This function must be called one time at creation of vertex buffer
 //unsigned ModuleRenderExercise::CreateTriangleVBO()
 //{
