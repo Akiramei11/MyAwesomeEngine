@@ -1,7 +1,6 @@
 #include "ModuleTexture.h"
 #include "DirectXTex.h"
 
-
 ModuleTexture::ModuleTexture()
 {
 }
@@ -46,12 +45,17 @@ bool ModuleTexture::CleanUp()
 	return true;
 }
 
-DirectX::ScratchImage ModuleTexture::LoadTexture(const char* file)
+unsigned ModuleTexture::LoadTexture(const std::string file)
 {
-	const size_t cSize = strlen(file) + 1;
-	wchar_t* fileName = new wchar_t[cSize];
-	size_t convertedChars = 0;
-	mbstowcs_s(&convertedChars, fileName, cSize, file, _TRUNCATE);
+	DirectX::ScratchImage image = LoadTextureImage(file);
+	return CreateTexture(&image);
+}
+
+
+DirectX::ScratchImage ModuleTexture::LoadTextureImage(const std::string file)
+{
+	std::wstring widestr = std::wstring(file.begin(), file.end());
+	const wchar_t* fileName = widestr.c_str();
 
 	DirectX::ScratchImage texture;
 	// Try loading DDS
@@ -66,7 +70,6 @@ DirectX::ScratchImage ModuleTexture::LoadTexture(const char* file)
 		hr = DirectX::LoadFromWICFile(fileName, DirectX::WIC_FLAGS_NONE, nullptr, texture);
 	}
 
-	delete[] fileName; // Remember to free the allocated memory
 
 	return texture;
 }

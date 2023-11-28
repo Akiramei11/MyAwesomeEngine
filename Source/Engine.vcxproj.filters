@@ -154,6 +154,7 @@
     <ClCompile Include="ModuleTexture.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -404,6 +405,13 @@
     <ClInclude Include="ModuleTexture.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="tinygltf\tiny_gltf.h">
+      <Filter>Externals\tinygltf</Filter>
+    </ClInclude>
+    <ClInclude Include="tinygltf\json.hpp">
+      <Filter>Externals\tinygltf</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
@@ -471,6 +479,9 @@
     </Filter>
     <Filter Include="Externals\debug_draw">
       <UniqueIdentifier>{6892e9ef-c69f-42d1-9eb6-c601e20f1e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\tinygltf">
+      <UniqueIdentifier>{6fbc321a-1b2d-44e7-ba35-9de9d815f3b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

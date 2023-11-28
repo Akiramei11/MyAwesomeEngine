@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "GL/glew.h"
 #include "DirectXTex.h"
+#include <string>
 
 class ModuleTexture : public Module
 {
@@ -16,7 +17,8 @@ public:
 	update_status PostUpdate() override;
 	bool CleanUp() override;
 
-	DirectX::ScratchImage LoadTexture(const char* file);
+	unsigned LoadTexture(const std::string file);
+	DirectX::ScratchImage LoadTextureImage(const std::string file);
 	unsigned CreateTexture(DirectX::ScratchImage* texture);
 
 private:
