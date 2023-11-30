@@ -4,7 +4,14 @@
 #include "ModuleDebugDraw.h"
 #include "debugdraw.h"
 #include "ModuleWindow.h"
+/*
+IMPORTANTE
+TODO: hacer las funciones const 
+TODO: hacer los parametros const reference
+TODO: quitar includes de los .h
+TODO: logica de la camara en la classe camera, no en input
 
+*/
 ModuleCamera::ModuleCamera()
 {
 	
@@ -86,47 +93,30 @@ bool ModuleCamera::CleanUp()
 	return true;
 }
 
-void ModuleCamera::CameraForward(bool positive, int amount) 
+void ModuleCamera::CameraForward( int amount) 
 {
-	if (positive) m_position = m_position + m_forward * m_speed * amount * 1;
-	else m_position = m_position + m_forward * m_speed * amount * -1;
+	m_position = m_position + m_forward * m_speed * amount;
 }
 
-void ModuleCamera::CameraRight(bool positive, int amount) 
+void ModuleCamera::CameraRight( int amount) 
 {
-	//float3 right = Cross(GetCameraForward(), up).Normalized();
-	if (positive) m_position = m_position + m_right * m_speed * amount * 0.5 * 1;
-	else m_position = m_position + m_right * m_speed * amount * 0.5 * -1;
+	m_position = m_position + m_right * m_speed * amount * 0.5;
 }
 
-void ModuleCamera::CameraUp(bool positive, int amount) {
-	if (positive) m_position = m_position + m_up * m_speed * amount * 0.5 * -1;
-	else m_position = m_position + m_up * m_speed * amount * 0.5 * 1;
+void ModuleCamera::CameraUp( int amount) {
+	m_position = m_position + m_up * m_speed * amount * 0.5;
 }
 
-void ModuleCamera::RotateCameraX(bool positive, int amount) 
+void ModuleCamera::RotateCameraX( int amount) 
 {
-	if (positive) {
-		m_forward = m_forward * float3x3::RotateAxisAngle(m_right, amount * -m_speedRot);
-		m_up = m_up * float3x3::RotateAxisAngle(m_right, amount * -m_speedRot);
-	}
-	else {
-		m_forward = m_forward * float3x3::RotateAxisAngle(m_right, amount * m_speedRot);
-		m_up = m_up * float3x3::RotateAxisAngle(m_right, amount * m_speedRot);
-	}
-	 
+	m_forward = m_forward * float3x3::RotateAxisAngle(m_right, amount * m_speedRot);
+	m_up = m_up * float3x3::RotateAxisAngle(m_right, amount * m_speedRot);
 }
-void ModuleCamera::RotateCameraY(bool positive, int amount) 
+void ModuleCamera::RotateCameraY(int amount) 
 {
-	if (positive) {
-		m_forward = m_forward * float3x3::RotateY(amount * -m_speedRot);
-		m_right = m_right * float3x3::RotateY(amount * -m_speedRot);
-	}
-	else {
-		m_forward = m_forward * float3x3::RotateY(amount * m_speedRot);
-		m_right = m_right * float3x3::RotateY(amount * m_speedRot);
-	}
-
+	m_forward = m_forward * float3x3::RotateY(amount * m_speedRot);
+	m_right = m_right * float3x3::RotateY(amount * m_speedRot);
+	m_up = m_up * float3x3::RotateY(amount * m_speedRot);
 }
 
 void ModuleCamera::CameraOrbitArround(float3 target, int deltaX, int deltaY) 
@@ -138,7 +128,7 @@ void ModuleCamera::Zoom(int value)
 {
 	//float sensitivity = m_frustum.verticalFov * 0.01;
 	//m_frustum.verticalFov = m_frustum.verticalFov + value * sensitivity;
-	CameraForward(true, value);
+	CameraForward( value);
 
 }
 

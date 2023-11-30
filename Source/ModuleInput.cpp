@@ -55,50 +55,50 @@ update_status ModuleInput::Update()
 
 
     if ((Buttons & SDL_BUTTON_LMASK)) {
-        App->GetCamera()->CameraRight(false, x - m_x);
-        App->GetCamera()->CameraUp(false, y - m_y);
+        App->GetCamera()->CameraRight( -x + m_x);
+        App->GetCamera()->CameraUp( y - m_y);
 
     }
     if (keyboard[SDL_SCANCODE_LALT] && (Buttons & SDL_BUTTON_RMASK)) {
         App->GetCamera()->Zoom(y - m_y);
     }
     else if ((Buttons & SDL_BUTTON_RMASK)) {
-        App->GetCamera()->RotateCameraY(true, x - m_x);
-        App->GetCamera()->RotateCameraX(true, y - m_y);
+        App->GetCamera()->RotateCameraY( x - m_x);
+        App->GetCamera()->RotateCameraX( y - m_y);
     }
     int rotation = 1;
     
     if (keyboard[SDL_SCANCODE_LEFT] == 1) {
-        App->GetCamera()->RotateCameraY(true, rotation);
+        App->GetCamera()->RotateCameraY( -rotation);
     }
     if (keyboard[SDL_SCANCODE_RIGHT] == 1) {
-        App->GetCamera()->RotateCameraY(false, rotation);
+        App->GetCamera()->RotateCameraY( rotation);
     }
     if (keyboard[SDL_SCANCODE_UP] == 1) {
-        App->GetCamera()->RotateCameraX(true, rotation);
+        App->GetCamera()->RotateCameraX( -rotation);
     }
     if (keyboard[SDL_SCANCODE_DOWN] == 1) {
-        App->GetCamera()->RotateCameraX(false, rotation);
+        App->GetCamera()->RotateCameraX( rotation);
     }
 
     int move = 1;
     if (keyboard[SDL_SCANCODE_W] == 1) {
-        App->GetCamera()->CameraForward(true, move);
+        App->GetCamera()->CameraForward( move);
     }
     if (keyboard[SDL_SCANCODE_S] == 1) {
-        App->GetCamera()->CameraForward(false, move);
+        App->GetCamera()->CameraForward( -move);
     }
     if (keyboard[SDL_SCANCODE_A] == 1) {
-        App->GetCamera()->CameraRight(false, move);
+        App->GetCamera()->CameraRight( -move);
     }
     if (keyboard[SDL_SCANCODE_D] == 1) {
-        App->GetCamera()->CameraRight(true, move);
+        App->GetCamera()->CameraRight( move);
     }
     if (keyboard[SDL_SCANCODE_Q] == 1) {
-        App->GetCamera()->CameraUp(false, move);
+        App->GetCamera()->CameraUp( move);
     }
     if (keyboard[SDL_SCANCODE_E] == 1) {
-        App->GetCamera()->CameraUp(true, move);
+        App->GetCamera()->CameraUp( -move);
     }
     
     m_x = x;

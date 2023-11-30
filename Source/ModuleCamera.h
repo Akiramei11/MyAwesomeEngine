@@ -16,11 +16,11 @@ public:
 	update_status PostUpdate() override;
 	bool CleanUp() override;
 
-	void CameraForward(bool positive, int amount);
-	void CameraRight(bool positive, int amount);
-	void CameraUp(bool positive, int amount);
-	void RotateCameraX(bool positive, int amount);
-	void RotateCameraY(bool positive, int amount);
+	void CameraForward( int amount);
+	void CameraRight( int amount);
+	void CameraUp( int amount);
+	void RotateCameraX( int amount);
+	void RotateCameraY( int amount);
 	void CameraOrbitArround(float3 target, int deltaX, int deltaY);
 	void Zoom(int value);
 
