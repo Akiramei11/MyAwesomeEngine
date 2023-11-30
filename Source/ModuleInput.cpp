@@ -63,21 +63,22 @@ update_status ModuleInput::Update()
         App->GetCamera()->Zoom(y - m_y);
     }
     else if ((Buttons & SDL_BUTTON_RMASK)) {
-        App->GetCamera()->RotateCameraX(true, y - m_y);
         App->GetCamera()->RotateCameraY(true, x - m_x);
+        App->GetCamera()->RotateCameraX(true, y - m_y);
     }
     int rotation = 1;
-    if (keyboard[SDL_SCANCODE_UP] == 1) {
-        App->GetCamera()->RotateCameraX(true, rotation);
-    }
-    if (keyboard[SDL_SCANCODE_DOWN] == 1) {
-        App->GetCamera()->RotateCameraX(false, rotation);
-    }
+    
     if (keyboard[SDL_SCANCODE_LEFT] == 1) {
         App->GetCamera()->RotateCameraY(true, rotation);
     }
     if (keyboard[SDL_SCANCODE_RIGHT] == 1) {
         App->GetCamera()->RotateCameraY(false, rotation);
+    }
+    if (keyboard[SDL_SCANCODE_UP] == 1) {
+        App->GetCamera()->RotateCameraX(true, rotation);
+    }
+    if (keyboard[SDL_SCANCODE_DOWN] == 1) {
+        App->GetCamera()->RotateCameraX(false, rotation);
     }
 
     int move = 1;

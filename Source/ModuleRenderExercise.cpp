@@ -32,7 +32,7 @@ update_status ModuleRenderExercise::Update()
 	unsigned program = App->GetProgram()->GetProgramId();
 	float4x4 model = float4x4::FromTRS(float3(0.0f, 0.0f, 0.0f),
 		float4x4::RotateZ(0.0f),
-		float3(4.0f, 4.0f, 4.0f));
+		float3(40.0f, 40.0f, 40.0f));
 
 	glUseProgram(program);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0]);

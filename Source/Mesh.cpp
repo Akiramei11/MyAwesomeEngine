@@ -108,9 +108,9 @@ void Mesh::LoadVBO(const tinygltf::Model& model, const tinygltf::Mesh& mesh, con
 	}
 	if (itTex_0 != primitive.attributes.end())
 	{
-		const tinygltf::Accessor& tex0Acc = model.accessors[itNorm->second];
+		const tinygltf::Accessor& tex0Acc = model.accessors[itTex_0->second];
 		m_numVertices = tex0Acc.count;
-		SDL_assert(tex0Acc.type == TINYGLTF_TYPE_VEC3);
+		SDL_assert(tex0Acc.type == TINYGLTF_TYPE_VEC2);
 		SDL_assert(tex0Acc.componentType == GL_FLOAT);
 		const tinygltf::BufferView& tex0View = model.bufferViews[tex0Acc.bufferView];
 		const tinygltf::Buffer& tex0Buffer = model.buffers[tex0View.buffer];
@@ -194,7 +194,7 @@ void Mesh::CreateVAO()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 5 * m_numVertices));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * m_numVertices));
 	glBindVertexArray(0);
 }
 void Model::Render() 

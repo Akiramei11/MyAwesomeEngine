@@ -20,8 +20,8 @@ bool ModuleCamera::Init()
 {
 	m_position = float3(4,2,4);	
 	m_up = float3(0, 1, 0);
-	m_speed = 0.01f;
-	m_speedRot = 0.01f;
+	m_speed = 0.003f;
+	m_speedRot = 0.001f;
 
 	m_frustum.type = FrustumType::PerspectiveFrustum;
 	m_frustum.pos = float3::zero;
@@ -136,8 +136,10 @@ void ModuleCamera::CameraOrbitArround(float3 target, int deltaX, int deltaY)
 
 void ModuleCamera::Zoom(int value) 
 {
-	float sensitivity = m_frustum.verticalFov * 0.01;
-	m_frustum.verticalFov = m_frustum.verticalFov + value * sensitivity;
+	//float sensitivity = m_frustum.verticalFov * 0.01;
+	//m_frustum.verticalFov = m_frustum.verticalFov + value * sensitivity;
+	CameraForward(true, value);
+
 }
 
 void ModuleCamera::UpdateProjectionMatrix(int screen_width, int screen_height) 
