@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleOpenGL.h"
 #include "ModuleRenderExercise.h"
+#include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
@@ -78,7 +79,13 @@ update_status ModuleInput::PreUpdate()
 	while (SDL_PollEvent(&event) != 0)
 	{
 		bool imguiHandlesEvent = ImGui_ImplSDL2_ProcessEvent(&event);
-		if (true) {
+		ImGuiIO& io = ImGui::GetIO();
+		if (event.button.windowID != 0 && event.button.windowID == SDL_GetWindowID(App->GetWindow()->GetWindow()))
+		{
+			imguiHandlesEvent = ImGui_ImplSDL2_ProcessEvent(&event);
+			continue;  // Saltar al siguiente evento, ya que fue manejado por ImGui
+		}
+		if (!imguiHandlesEvent) {
 			switch (event.type)
 			{
 			case SDL_QUIT:

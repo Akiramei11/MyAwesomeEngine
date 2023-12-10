@@ -15,8 +15,8 @@ ModuleProgram::~ModuleProgram()
 
 bool ModuleProgram::Init() 
 {
-	const char* vertex_source = LoadShaderSource("..\\Source\\shaders\\default_vertex.glsl");
-	const char* fragment_source = LoadShaderSource("..\\Source\\shaders\\default_fragment.glsl");
+	const char* vertex_source = LoadShaderSource("shaders\\default_vertex.glsl");
+	const char* fragment_source = LoadShaderSource("shaders\\default_fragment.glsl");
 
 	unsigned vertex_shader = CompileShader(GL_VERTEX_SHADER, vertex_source);
 	unsigned fragment_shader = CompileShader(GL_FRAGMENT_SHADER, fragment_source);
