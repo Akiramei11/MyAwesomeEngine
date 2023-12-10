@@ -154,7 +154,13 @@
     <ClCompile Include="ModuleTexture.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBuffer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -411,7 +417,13 @@
     <ClInclude Include="tinygltf\json.hpp">
       <Filter>Externals\tinygltf</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Mesh.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBuffer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
@@ -482,6 +494,9 @@
     </Filter>
     <Filter Include="Externals\tinygltf">
       <UniqueIdentifier>{6fbc321a-1b2d-44e7-ba35-9de9d815f3b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{4057be7f-2ba3-45b6-ae20-adee67945829}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "MathGeoLib.h"
-#include "Mesh.h"
+#include "ModelObject.h"
 
 class ModuleRenderExercise : public Module
 {
@@ -18,9 +18,11 @@ public:
 	void RenderVBO(unsigned program);
 	unsigned CreateTriangleVBO();
 	void DestroyVBO();
+	ModelObject* GetModel() { return &m_model; }
+
+	void ClearModel();
+	void LoadModel(std::string path);
 
 private:
-	unsigned triangle;
-	unsigned texture_object;
-	Model m_bakerHouse;
+	ModelObject m_model;
 };

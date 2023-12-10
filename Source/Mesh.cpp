@@ -13,54 +13,6 @@
 #include "tiny_gltf.h"
 
 
-Model::Model() 
-{
-
-}
-Model::~Model() 
-{
-
-}
-void Model::Load(const char* assetFileName)
-{
-	tinygltf::TinyGLTF gltfContext;
-	tinygltf::Model srcModel;
-	std::string error, warning;
-	bool loadOk = gltfContext.LoadASCIIFromFile(&srcModel, &error, &warning, assetFileName);
-	if (!loadOk)
-	{
-		LOG("Error loading %s: %s", assetFileName, error.c_str());
-	}
-	LoadMaterials(srcModel);
-	for (const auto& srcMesh : srcModel.meshes)
-	{
-		for (const auto& primitive : srcMesh.primitives)
-		{
-			Mesh mesh = Mesh();
-			mesh.LoadVBO(srcModel, srcMesh, primitive);
-			mesh.LoadEBO(srcModel, srcMesh, primitive);
-			mesh.CreateVAO();			
-			mesh.SetMaterial(primitive.material);
-			m_mesh.push_back(mesh);
-		}
-	}
-}
-
-void Model::LoadMaterials(const tinygltf::Model& srcModel)
-{
-	for (const auto& srcMaterial : srcModel.materials)
-	{
-		unsigned int textureId = 0;
-		if (srcMaterial.pbrMetallicRoughness.baseColorTexture.index >= 0)
-		{
-			const tinygltf::Texture& texture = srcModel.textures[srcMaterial.pbrMetallicRoughness.baseColorTexture.index];
-			const tinygltf::Image& image = srcModel.images[texture.source];
-			textureId = (App->GetTextures()->LoadTexture(image.uri));
-		}
-		m_textures.push_back(textureId);
-	}
-}
-
 Mesh::Mesh()
 {
 
@@ -197,13 +149,6 @@ void Mesh::CreateVAO()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * m_numVertices));
 	glBindVertexArray(0);
 }
-void Model::Render() 
-{
-	for (Mesh mesh : m_mesh) 
-	{
-		mesh.Render(m_textures);
-	}
-}
 void Mesh::Render(const std::vector<unsigned>& textures)
 {
 	unsigned program = App->GetProgram()->GetProgramId();
@@ -216,5 +161,4 @@ void Mesh::Render(const std::vector<unsigned>& textures)
 	//glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
 
 }
-
 

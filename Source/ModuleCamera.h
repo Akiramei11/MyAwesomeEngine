@@ -29,20 +29,26 @@ public:
 	void UpdateCameraMatrix();
 	void LookAt(float3 target, float3 up);
 
+	void CameraControls();
+	const float GetSpeed() const { return m_speed; }
+	const float GetSpeedRot() const { return m_speedRot; }
+
+	void SetSpeed(const float speed) { m_speed = speed; }
+	void SetSpeedRot(const float speed) { m_speedRot = speed; }
 
 private:
 	float3 m_position;
 	float3 m_forward;
 	float3 m_right;
 	float3 m_up;
-	float m_speed;
-	float m_speedRot;
+	float m_speed = 0;
+	float m_speedRot = 0;
 
 	float4x4 m_proj;
 	float4x4 m_view;
 	float4x4 m_camera;
 
-	float m_verticalFov;
+	float m_verticalFov = 0;
 
 	Frustum m_frustum;
 };

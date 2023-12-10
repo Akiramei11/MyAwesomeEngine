@@ -30,8 +30,10 @@ public:
     ModuleInput*  GetInput() { return input; }
     ModuleProgram* GetProgram() { return program; }
     ModuleCamera* GetCamera() { return camera; }
+    ModuleEditor* GetEditor() { return editor; }
     ModuleDebugDraw* GetDebugDraw() { return debug_draw; }
     ModuleTexture* GetTextures() { return texture; }
+    ModuleRenderExercise* GetExercise() { return exercice; }
 
 
 private:

@@ -2,17 +2,25 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleOpenGL.h"
-#include "ModuleCamera.h"
+#include "ModuleRenderExercise.h"
 #include "SDL/include/SDL.h"
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
 
+#define MAX_KEYS 300
+
 ModuleInput::ModuleInput()
-{}
+{
+    keyboard = new KeyState[MAX_KEYS];
+    memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
+    memset(mouse_buttons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
+}
 
 // Destructor
 ModuleInput::~ModuleInput()
-{}
+{
+    delete[] keyboard;
+}
 
 // Called before render is available
 bool ModuleInput::Init()
@@ -27,90 +35,127 @@ bool ModuleInput::Init()
 		ret = false;
 	}
 
-    keyboard = SDL_GetKeyboardState(NULL);
-    mouse = SDL_GetMouseState(&m_x, &m_y);
 	return ret;
 }
 
 // Called every draw update
-update_status ModuleInput::Update()
+update_status ModuleInput::PreUpdate()
 {
-    SDL_Event sdlEvent;
+	static SDL_Event event;
 
-    while (SDL_PollEvent(&sdlEvent) != 0)
-    {
-        ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-        switch (sdlEvent.type)
-        {
-        case SDL_QUIT:
-            return UPDATE_STOP;
-        case SDL_WINDOWEVENT:
-            if (sdlEvent.window.event == SDL_WINDOWEVENT_RESIZED || sdlEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                App->GetOpenGL()->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
-            break;
-        }
-    }
-    int x, y;
-    Uint32 Buttons{ SDL_GetMouseState(&x, &y) };
+	mouse_motion = { 0, 0 };
+	memset(windowEvents, false, WE_COUNT * sizeof(bool));
 
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-    if ((Buttons & SDL_BUTTON_LMASK)) {
-        App->GetCamera()->CameraRight( -x + m_x);
-        App->GetCamera()->CameraUp( y - m_y);
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		if (keys[i] == 1)
+		{
+			if (keyboard[i] == KEY_IDLE)
+				keyboard[i] = KEY_DOWN;
+			else
+				keyboard[i] = KEY_REPEAT;
+		}
+		else
+		{
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+				keyboard[i] = KEY_UP;
+			else
+				keyboard[i] = KEY_IDLE;
+		}
+	}
 
-    }
-    if (keyboard[SDL_SCANCODE_LALT] && (Buttons & SDL_BUTTON_RMASK)) {
-        App->GetCamera()->Zoom(y - m_y);
-    }
-    else if ((Buttons & SDL_BUTTON_RMASK)) {
-        App->GetCamera()->RotateCameraY( x - m_x);
-        App->GetCamera()->RotateCameraX( y - m_y);
-    }
-    int rotation = 1;
-    
-    if (keyboard[SDL_SCANCODE_LEFT] == 1) {
-        App->GetCamera()->RotateCameraY( -rotation);
-    }
-    if (keyboard[SDL_SCANCODE_RIGHT] == 1) {
-        App->GetCamera()->RotateCameraY( rotation);
-    }
-    if (keyboard[SDL_SCANCODE_UP] == 1) {
-        App->GetCamera()->RotateCameraX( -rotation);
-    }
-    if (keyboard[SDL_SCANCODE_DOWN] == 1) {
-        App->GetCamera()->RotateCameraX( rotation);
-    }
+	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
+	{
+		if (mouse_buttons[i] == KEY_DOWN)
+			mouse_buttons[i] = KEY_REPEAT;
 
-    int move = 1;
-    if (keyboard[SDL_SCANCODE_W] == 1) {
-        App->GetCamera()->CameraForward( move);
-    }
-    if (keyboard[SDL_SCANCODE_S] == 1) {
-        App->GetCamera()->CameraForward( -move);
-    }
-    if (keyboard[SDL_SCANCODE_A] == 1) {
-        App->GetCamera()->CameraRight( -move);
-    }
-    if (keyboard[SDL_SCANCODE_D] == 1) {
-        App->GetCamera()->CameraRight( move);
-    }
-    if (keyboard[SDL_SCANCODE_Q] == 1) {
-        App->GetCamera()->CameraUp( move);
-    }
-    if (keyboard[SDL_SCANCODE_E] == 1) {
-        App->GetCamera()->CameraUp( -move);
-    }
-    
-    m_x = x;
-    m_y = y;
+		if (mouse_buttons[i] == KEY_UP)
+			mouse_buttons[i] = KEY_IDLE;
+	}
 
-    return UPDATE_CONTINUE;
+	while (SDL_PollEvent(&event) != 0)
+	{
+		bool imguiHandlesEvent = ImGui_ImplSDL2_ProcessEvent(&event);
+		if (true) {
+			switch (event.type)
+			{
+			case SDL_QUIT:
+				windowEvents[WE_QUIT] = true;
+				break;
+
+			case SDL_WINDOWEVENT:
+				switch (event.window.event)
+				{
+					//case SDL_WINDOWEVENT_LEAVE:
+				case SDL_WINDOWEVENT_HIDDEN:
+				case SDL_WINDOWEVENT_MINIMIZED:
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					windowEvents[WE_HIDE] = true;
+					break;
+
+					//case SDL_WINDOWEVENT_ENTER:
+				case SDL_WINDOWEVENT_SHOWN:
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_MAXIMIZED:
+				case SDL_WINDOWEVENT_RESTORED:
+					windowEvents[WE_SHOW] = true;
+					break;
+				case SDL_WINDOWEVENT_RESIZED:
+				case SDL_WINDOWEVENT_SIZE_CHANGED:
+					App->GetOpenGL()->WindowResized(event.window.data1, event.window.data2);
+					break;
+				}
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				mouse_buttons[event.button.button - 1] = KEY_DOWN;
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				mouse_buttons[event.button.button - 1] = KEY_UP;
+				break;
+
+			case SDL_MOUSEMOTION:
+				mouse_motion.first = event.motion.xrel;
+				mouse_motion.second = event.motion.yrel;
+				mouse.first = event.motion.x;
+				mouse.second = event.motion.y;
+				break;
+
+			case SDL_DROPFILE:
+				LOG("Loading File: %s", event.drop.file);
+				App->GetExercise()->ClearModel();
+				App->GetExercise()->LoadModel(event.drop.file);
+			}
+		}
+	}
+
+	if (GetWindowEvent(EventWindow::WE_QUIT) == true || GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		return UPDATE_STOP;
+
+	return UPDATE_CONTINUE;
 }
-
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
+}
+
+bool ModuleInput::GetWindowEvent(EventWindow ev) const
+{
+	return windowEvents[ev];
+}
+
+const std::pair<int, int>& ModuleInput::GetMousePosition() const
+{
+	return mouse;
+}
+
+const std::pair<int, int>& ModuleInput::GetMouseMotion() const
+{
+	return mouse_motion;
 }

@@ -4,6 +4,9 @@
 #include "ModuleDebugDraw.h"
 #include "debugdraw.h"
 #include "ModuleWindow.h"
+#include "ModuleInput.h"
+
+
 /*
 IMPORTANTE
 TODO: hacer las funciones const 
@@ -38,7 +41,6 @@ bool ModuleCamera::Init()
 	m_frustum.farPlaneDistance = 100.0f;
 	m_frustum.verticalFov = math::pi / 4.0f;
 
-
 	int windowWidth, windowHeight;
 	SDL_GetWindowSize(App->GetWindow()->GetWindow(), &windowWidth, &windowHeight);
 	float3 target = float3(0, 0, 0);
@@ -58,11 +60,60 @@ update_status ModuleCamera::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
+void ModuleCamera::CameraControls() 
+{
+	if (App->GetInput()->GetMouseButtonDown(SDL_BUTTON_LEFT) == 2) {
+		CameraRight(App->GetInput()->GetMouseMotion().first);
+		CameraUp(App->GetInput()->GetMouseMotion().second);
+
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_LALT) && (App->GetInput()->GetMouseButtonDown(SDL_BUTTON_RIGHT) == 2)) {
+		Zoom(App->GetInput()->GetMouseMotion().second);
+	}
+	else if (App->GetInput()->GetMouseButtonDown(SDL_BUTTON_RIGHT) == 2) {
+		RotateCameraY(App->GetInput()->GetMouseMotion().first);
+		RotateCameraX(App->GetInput()->GetMouseMotion().second);
+	}
+	int rotation = 1;
+	if (App->GetInput()->GetKey(SDL_SCANCODE_LEFT) == 2) {
+		RotateCameraY(-rotation);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_RIGHT) == 2) {
+		RotateCameraY(rotation);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_UP) == 2) {
+		RotateCameraX(-rotation);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_DOWN) == 2) {
+		RotateCameraX(rotation);
+	}
+	int move = 1;
+	if (App->GetInput()->GetKey(SDL_SCANCODE_W) == 2) {
+		CameraForward(move);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_S) == 2) {
+		CameraForward(-move);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_A) == 2) {
+		CameraRight(move);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_D) == 2) {
+		CameraRight(-move);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_Q) == 2) {
+		CameraUp(move);
+	}
+	if (App->GetInput()->GetKey(SDL_SCANCODE_E) == 2) {
+		CameraUp(-move);
+	}
+}
 // Called every draw update
 update_status ModuleCamera::Update()
 {
 	int windowWidth, windowHeight;
 	SDL_GetWindowSize(App->GetWindow()->GetWindow(), &windowWidth, &windowHeight);
+
+	CameraControls();
 
 	UpdateProjectionMatrix(windowWidth, windowHeight);
 	UpdateCameraMatrix();
@@ -81,8 +132,6 @@ update_status ModuleCamera::Update()
 
 update_status ModuleCamera::PostUpdate()
 {
-
-
 	return UPDATE_CONTINUE;
 }
 
@@ -100,11 +149,11 @@ void ModuleCamera::CameraForward( int amount)
 
 void ModuleCamera::CameraRight( int amount) 
 {
-	m_position = m_position + m_right * m_speed * amount * 0.5;
+	m_position = m_position + m_right * m_speed * -amount;
 }
 
 void ModuleCamera::CameraUp( int amount) {
-	m_position = m_position + m_up * m_speed * amount * 0.5;
+	m_position = m_position + m_up * m_speed * amount;
 }
 
 void ModuleCamera::RotateCameraX( int amount) 

@@ -20,6 +20,9 @@ public:
 
 	void Render(const std::vector<unsigned>& textures);
 
+	int GetNumIndices() { return m_numIndices; }
+
+
 private:
 	unsigned m_vbo;
 	unsigned m_ebo;
@@ -28,20 +31,4 @@ private:
 
 	int m_numVertices;
 	int m_numIndices;
-};
-
-class Model
-{
-public:
-	Model();
-	~Model();
-	void Load(const char* assetFileName);
-	void LoadMaterials(const tinygltf::Model& srcModel);
-
-	void Render();
-
-
-private:
-	std::vector<Mesh> m_mesh;
-	std::vector<unsigned> m_textures;
 };
